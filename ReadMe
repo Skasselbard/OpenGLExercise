@@ -1,0 +1,16 @@
+Build on Ubuntu Linux with CLion
+
+To Build:
+    1. Install CLion
+        https://www.jetbrains.com/clion/download/#section=linux-version
+    2. Install OpenGL Glut Glew and Glu libraries with
+        sudo apt-get install lut3-dev mesa-common-dev libglew-dev
+        Don't include the libraries directly, they won't compile
+    3. Start Clion and open an existing project
+    4. Select the CMakeLists.txt as ProjectFile
+    5. Edit the RUN Configurations
+        add the vertexShader and fragmentShader path to the commandline arguments e.g:
+        -v /home/tom/dev/Computergrafik/AbgabeOpenGl/Aufgabe/media/shader/VertexShader.glsl -f /home/tom/dev/Computergrafik/AbgabeOpenGl/Aufgabe/media/shader/FragmentShader.glsl
+        Better to use unix like paths without spaces (didn't want to put much effort in handling paths)
+        Alternatively hardcode the paths
+
