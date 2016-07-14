@@ -184,7 +184,14 @@ void Drawable::translate(float x, float y, float z) {
 
 void Drawable::setShaderProgramm(GLint shaderProgramID) {
     this->shaderProgramID = shaderProgramID;
+    this->createGeometry();
 }
+
+void Drawable::scale(float xyz) {
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(xyz,xyz,xyz));
+}
+
+
 
 
 

@@ -7,17 +7,23 @@
 
 
 #include "Drawable.h"
-//http://stackoverflow.com/a/5989676
+//http://stackoverflow.com/a/7687312
 class Sphere: public Drawable {
 public:
-    Sphere(float radius, unsigned int rings, unsigned int sectors);
+    Sphere(float radius);
     void draw();
 
 protected:
     std::vector<GLfloat> vertices;
-    std::vector<GLfloat> normals;
-    std::vector<GLfloat> texcoords;
-    std::vector<GLushort> indices;
+
+private:
+    float radius;
+    //create an empty list of vertices
+    std::vector<vec3> vertexArray;
+    void createGeometry();
+    void addVertices(std::vector<vec3> &vertexArray);
+    std::vector<vec3> splitTriangle(std::vector<vec3> &threePoints, unsigned int iterations);
+    vec3 normalize(vec3 fixpoint, vec3 point, float radius);
 };
 
 

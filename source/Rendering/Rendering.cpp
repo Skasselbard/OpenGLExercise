@@ -243,7 +243,7 @@ void RenderScene()
 void Display() 
 {
   //define color that is used to clear the screen
-  glClearColor(1.0f, 1.0f, 1.0f, 1.0);
+  glClearColor(0.7f, 0.7f, 0.7f, 1.0);
 
   //clear the current color and depth buffer
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -323,12 +323,12 @@ int main(int argc, char* argv[])
     //SetupShader("/home/tom/dev/Computergrafik/Abgabe OpenGl/Aufgabe/media/shader/VertexShader.glsl","/home/tom/dev/Computergrafik/Abgabe OpenGl/Aufgabe/media/shader/FragmentShader.glsl");
     SetupShader(vertexShaderPath,fragmentShaderPath);
 
-    Sphere* sky = new Sphere(1.0,10,10);
+    Sphere* sky = new Sphere(0.5);
     sky->setShaderProgramm(shaderProgramID);
     addDrawable(sky);
     Cube* cube = new Cube();
     cube->setShaderProgramm(shaderProgramID);
-    cube->scale(25,1,25);
+    cube->scale(1,1,1);
     addDrawable(cube);
 
     //enter main loop

@@ -171,7 +171,7 @@ Cube::Cube(std::string const &vertexShaderFilePath, std::string const &fragmentS
 }
 
 void Cube::draw() {
-    createGeometry();
+    //createGeometry();
     glUseProgram(shaderProgramID);
 
     GLint uniformLocation(0);

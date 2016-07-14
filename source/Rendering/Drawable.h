@@ -10,7 +10,8 @@ class Drawable {
 public:
 
     virtual void draw() = 0;
-    virtual void scale(float x, float y, float z);
+    void scale(float x, float y, float z);
+    void scale(float xyz);
     virtual void translate(float x, float y, float z);
     void setShaderProgramm(GLint ShaderProgramID);
 
@@ -23,6 +24,7 @@ protected:
     void setFragmentShaderFile(std::string const &file);
     void setVertexShaderFile(std::string const &file);
     void initShader();
+    virtual void createGeometry()=0;
 
 private:
     enum SHADER_TYPE{
