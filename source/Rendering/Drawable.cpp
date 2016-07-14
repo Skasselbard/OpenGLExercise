@@ -2,6 +2,7 @@
 // Created by tom on 13.07.16.
 //
 
+#include <glm/gtx/transform.hpp>
 #include "Drawable.h"
 
 char * Drawable::loadShaderFile(std::string const &file) {
@@ -174,11 +175,11 @@ void Drawable::draw() {
 }
 
 void Drawable::scale(float x, float y, float z) {
-    assert(false);
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(x,y,z));
 }
 
 void Drawable::translate(float x, float y, float z) {
-    assert(false);
+    modelMatrix = glm::translate(modelMatrix, glm::vec3(x,y,z));
 }
 
 void Drawable::setShaderProgramm(GLint shaderProgramID) {

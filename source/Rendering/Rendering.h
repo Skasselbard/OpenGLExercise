@@ -130,11 +130,6 @@ static void Display();
 // size of window changed
 static void Reshape(int w, int h);
 
-//create geometry
-static void createGeometry(void);
-
-void addCubeVertices(std::vector<vec3> &vertexArray);
-
 void addDrawable(Drawable* drawable);
 
 void draw();

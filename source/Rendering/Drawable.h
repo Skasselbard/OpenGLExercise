@@ -10,8 +10,8 @@ class Drawable {
 public:
 
     virtual void draw() = 0;
-    virtual void scale(float x, float y, float z) = 0;
-    virtual void translate(float x, float y, float z) = 0;
+    virtual void scale(float x, float y, float z);
+    virtual void translate(float x, float y, float z);
     void setShaderProgramm(GLint ShaderProgramID);
 
 

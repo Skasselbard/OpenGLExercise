@@ -170,10 +170,6 @@ Cube::Cube(std::string const &vertexShaderFilePath, std::string const &fragmentS
     initShader();
 }
 
-void Cube::scale(float x, float y, float z) {
-
-}
-
 void Cube::draw() {
     createGeometry();
     glUseProgram(shaderProgramID);
@@ -193,9 +189,6 @@ Cube::Cube() {
 
 }
 
-void Cube::translate(float x, float y, float z) {
-
-}
 
 
 

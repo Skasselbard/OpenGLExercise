@@ -10,10 +10,8 @@
 //http://stackoverflow.com/a/5989676
 class Sphere: public Drawable {
 public:
-    Sphere(float radius);
+    Sphere(float radius, unsigned int rings, unsigned int sectors);
     void draw();
-    void scale(float x, float y, float z);
-    void translate(float x, float y, float z);
 
 protected:
     std::vector<GLfloat> vertices;
