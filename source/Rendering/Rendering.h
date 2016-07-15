@@ -33,3 +33,5 @@ static void Reshape(int w, int h);
 void addDrawable(Drawable* drawable);
 
 void draw();
+
+void setUpObjects();

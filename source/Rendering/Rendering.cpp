@@ -241,14 +241,7 @@ int main(int argc, char* argv[])
     }
 
     shaderProgramID = ShaderCompiler::compileShader(vertexShaderPath,fragmentShaderPath);
-
-    Sphere* sky = new Sphere(0.5);
-    sky->setShaderProgramm(shaderProgramID);
-    Cube* cube = new Cube();
-    cube->setShaderProgramm(shaderProgramID);
-    cube->scale(1,1,1);
-    addDrawable(sky);
-    addDrawable(cube);
+    setUpObjects();
 
     //enter main loop
     glutMainLoop();
@@ -264,6 +257,19 @@ void draw() {
         objectList[i]->draw();
     }
 }
+
+void setUpObjects() {
+    Sphere* sky = new Sphere(0.5);
+    sky->setShaderProgramm(shaderProgramID);
+    Cube* cube = new Cube();
+    cube->setShaderProgramm(shaderProgramID);
+    cube->scale(1,1,1);
+    sky->scale(-1.0f);
+    addDrawable(sky);
+    addDrawable(cube);
+}
+
+
 
 
 
