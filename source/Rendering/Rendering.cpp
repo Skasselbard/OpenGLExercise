@@ -5,7 +5,6 @@
 #include <cstdlib>
 #include <memory>
 #include <algorithm> 
-#include <iostream>
 #include <string>
 
 //vector and matrix calculation
@@ -19,6 +18,7 @@
 #include "Helper.h"
 #include "Sphere.h"
 #include "Cube.h"
+#include "ShaderCompiler.h"
 
 
 
@@ -78,7 +78,6 @@ void KeyReleased(unsigned char key, int x, int y)
 {
 }
 
-
 //evaluates special keys
 void KeyPressed(int key, int x, int y)
 {
@@ -113,103 +112,20 @@ void KeyPressed(int key, int x, int y)
     }
 }
 
-
 //evaluates special keys
 void KeyReleased(int key, int x, int y)
 {
 }
-
 
 //evaluates mouse input
 void MouseKey(int button, int state, int x, int y)
 {
 }
 
-
 //evaluates mouse input
 void MouseMove(int x, int y)
 {
 }
-
-//this method wraps up compilation and linking of a shader program (vertex + fragment shader
-void CreateShaderProgram(std::string const & vertexShaderFile, std::string const & fragmentShaderFile, GLint & shaderProgramID)
-{
-    //Vertex Shader-------------------------------------------------------
-    // get a shader handler
-    GLint vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-
-    // read the shader source from a file
-    char *shaderStream = nullptr;
-    shaderStream = ReadShaderFile(vertexShaderFile);
-
-    // conversions to fit the next function
-    const char *  constVertexShaderStream = shaderStream;
-
-    // pass the source text to GL
-    glShaderSource(vertexShaderID, 1, &constVertexShaderStream, NULL);
-
-    // free the memory from the source text
-    free(shaderStream);
-    shaderStream = nullptr;
-
-    // finally compile the shader
-    glCompileShader(vertexShaderID);
-
-    //query status
-    int query;
-    glGetShaderiv(vertexShaderID, GL_COMPILE_STATUS, &query);
-    if (!CheckQuery(query, vertexShaderID, std::string("Vertex Shader"))) return;
-
-
-    //Fragment Shader----------------------------------------------------
-    // get a shader handler
-    GLint fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-    // read the shader source from a file
-    shaderStream = ReadShaderFile(fragmentShaderFile);
-    // conversions to fit the next function
-    const char *  constFragmentShaderStream = shaderStream;
-    // pass the source text to GL
-    glShaderSource(fragmentShaderID, 1, &constFragmentShaderStream, NULL);
-    // free the memory from the source text
-    free(shaderStream);
-    shaderStream = nullptr;
-
-    // finally compile the shader
-    glCompileShader(fragmentShaderID);
-
-    //query status
-    glGetShaderiv(fragmentShaderID, GL_COMPILE_STATUS, &query);
-    if (!CheckQuery(query, fragmentShaderID, std::string("Fragment Shader"))) return;
-
-    //now attach shader on a program----------------------------------------------------
-    shaderProgramID = glCreateProgram();
-
-    glAttachShader(shaderProgramID, vertexShaderID);
-    glAttachShader(shaderProgramID, fragmentShaderID);
-
-    glLinkProgram(shaderProgramID);
-
-    glGetProgramiv(shaderProgramID, GL_LINK_STATUS, &query);
-    if (!CheckQuery(query, shaderProgramID, std::string("Link Program"))) return;
-
-    glValidateProgram(shaderProgramID);
-    glGetProgramiv(shaderProgramID, GL_VALIDATE_STATUS, &query);
-    if (!CheckQuery(query, shaderProgramID, std::string("Validate Program"))) return;
-}
-
-//loads shader files
-void SetupShader(const char* vertexShaderPath, const char* fragmentShaderPath)
-{
-  if (vertexShaderPath == nullptr){
-    vertexShaderPath = "../../media/shader/VertexShader.glsl";
-  }
-  if ( fragmentShaderPath == nullptr){
-    fragmentShaderPath = "../../media/shader/FragmentShader.glsl";
-  }
-  CreateShaderProgram(vertexShaderPath, fragmentShaderPath, shaderProgramID);
-}
-
-
 
 /************************************************************************/
 /* scene updating and rendering                                         */
@@ -324,9 +240,7 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
     }
 
-
-    //SetupShader("/home/tom/dev/Computergrafik/Abgabe OpenGl/Aufgabe/media/shader/VertexShader.glsl","/home/tom/dev/Computergrafik/Abgabe OpenGl/Aufgabe/media/shader/FragmentShader.glsl");
-    SetupShader(vertexShaderPath,fragmentShaderPath);
+    shaderProgramID = ShaderCompiler::compileShader(vertexShaderPath,fragmentShaderPath);
 
     Sphere* sky = new Sphere(0.5);
     sky->setShaderProgramm(shaderProgramID);

@@ -9,7 +9,6 @@
 
 class Cube: public Drawable{
 public:
-    Cube(std::string const &vertexShaderFilePath, std::string const &fragmentShaderFilePath);
     Cube();
     void draw();
 private:

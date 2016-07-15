@@ -164,12 +164,6 @@ void Cube::colorise(std::vector<vec4> &colorArray) {
     }
 }
 
-Cube::Cube(std::string const &vertexShaderFilePath, std::string const &fragmentShaderFilePath) {
-    setFragmentShaderFile(vertexShaderFilePath);
-    setVertexShaderFile(fragmentShaderFilePath);
-    initShader();
-}
-
 void Cube::draw() {
     //createGeometry();
     glUseProgram(shaderProgramID);
