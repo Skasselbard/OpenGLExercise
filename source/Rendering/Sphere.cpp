@@ -10,53 +10,42 @@ Sphere::Sphere(float radius) {
 }
 
 void Sphere::draw() {
-
     glUseProgram(shaderProgramID);
-
     GLint uniformLocation(0);
     uniformLocation = glGetUniformLocation(shaderProgramID, "modelMatrix");
     glUniformMatrix4fv(uniformLocation, 1, false, &modelMatrix[0][0]);
-
     glBindVertexArray(vertexArrayObject);
     glDrawArrays(GL_TRIANGLES, 0, vertexArray.size());
     glBindVertexArray(0);
-
     glUseProgram(0);
 }
 
 void Sphere::createGeometry() {
     addVertices(vertexArray);
-
     //vertex array object -- wraps up geometry and consists of multiple vertex buffer objects and their stats
     glGenVertexArrays(1, &vertexArrayObject);
     glBindVertexArray(vertexArrayObject);
-
     //create vertex buffer object -- a list of vertices, normals etc. In this case wraps up list of vertices. It exists on GPU side and allows transferring geometry data from CPU to GPU
     GLuint vboVertex;
     glGenBuffers(1, &vboVertex);
     glBindBuffer(GL_ARRAY_BUFFER, vboVertex);
-
     //transfer vertices
     //void glBufferData(GLenum  target, GLsizeiptr  size, const GLvoid *  data, GLenum  usage);
     glBufferData(GL_ARRAY_BUFFER, vertexArray.size() * sizeof(vec3), vertexArray.data(), GL_STATIC_DRAW);
-
     //get attribute index for variable vsPosition
     GLint attributeIndex = glGetAttribLocation(shaderProgramID, "vsPosition");
-
     //tell GPU how to interpret this data for the specified attribute
     glVertexAttribPointer(attributeIndex, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-
     //activate this attribute
     glEnableVertexAttribArray(attributeIndex);
-
     //unbind vbo -- saves all stats given to this objects until this point
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-
     //unbind vertex array objects -- saves all stats given to this objects until this point
     glBindVertexArray(0);
 }
 
 void Sphere::addVertices(std::vector<vec3> &vertexArray) {
+    //vertex positions
     const glm::vec3 top         = glm::vec3(0.0f,radius,0.0f);
     const glm::vec3 bottom      = glm::vec3(0.0f,-radius,0.0f);
     const glm::vec3 frontLeft   = glm::vec3(-radius,0.0f,radius);
@@ -75,6 +64,7 @@ void Sphere::addVertices(std::vector<vec3> &vertexArray) {
 
     const int detailIterations = 5;
 
+    //add und split triangles
     //TopFront
     vertexArrayTopFront.push_back(top);
     vertexArrayTopFront.push_back(frontLeft);
@@ -128,15 +118,20 @@ void Sphere::addVertices(std::vector<vec3> &vertexArray) {
     vertexArray.insert(vertexArray.end(),vertexArrayBottomRight.begin(), vertexArrayBottomRight.end());
     vertexArray.insert(vertexArray.end(),vertexArrayBottomBack.begin(), vertexArrayBottomBack.end());
 
-
+    float scalefactor =64; // the higher, the rounder
+    //Normalize vertices
     for (int i = 0; i < vertexArray.size(); i++){
-        vertexArray[i] = normalize(vertexArray[i],glm::vec3(0.0f,0.0f,0.0f),-radius*10);
+        vertexArray[i] = normalize(vertexArray[i],glm::vec3(0.0f,0.0f,0.0f),-scalefactor*radius);
     }
-    scale(0.5f/5.0f);
+    //scale to fit radius
+    scale(1.0f/scalefactor);
 }
-
+/**
+ * from this nice post
+ * //http://stackoverflow.com/a/7687312
+ */
 vec3 Sphere::normalize(vec3 fixpoint, vec3 point, float radius) {
-    //get the distance between a and b along the x and y axes
+        //get the distance between a and b along the x and y axes
     float dx = point.x - fixpoint.x;
     float dy = point.y - fixpoint.y;
     float dz = point.z - fixpoint.z;
@@ -152,6 +147,9 @@ vec3 Sphere::normalize(vec3 fixpoint, vec3 point, float radius) {
     return c;
 }
 
+/**
+ * split one Triangle into 4 triangles - triforce style!
+ */
 std::vector<vec3> Sphere::splitTriangle(std::vector<vec3> &threePoints, unsigned int iterations) {
     if(threePoints.size() != 3){
         assert(false);
@@ -194,15 +192,15 @@ std::vector<vec3> Sphere::splitTriangle(std::vector<vec3> &threePoints, unsigned
 
     if (iterations > 0){
         iterations--;
+        triangleBDE = splitTriangle(triangleBDE, iterations);//upper Triangle first for painting
         triangleAFD = splitTriangle(triangleAFD, iterations);
         triangleDFE = splitTriangle(triangleDFE, iterations);
         triangleEFC = splitTriangle(triangleEFC, iterations);
-        triangleBDE = splitTriangle(triangleBDE, iterations);
-    }
+            }
+    resultTriangle.insert(resultTriangle.end(), triangleBDE.begin(), triangleBDE.end());
     resultTriangle.insert(resultTriangle.end(), triangleAFD.begin(), triangleAFD.end());
     resultTriangle.insert(resultTriangle.end(), triangleDFE.begin(), triangleDFE.end());
     resultTriangle.insert(resultTriangle.end(), triangleEFC.begin(), triangleEFC.end());
-    resultTriangle.insert(resultTriangle.end(), triangleBDE.begin(), triangleBDE.end());
     return  resultTriangle;
 }
 

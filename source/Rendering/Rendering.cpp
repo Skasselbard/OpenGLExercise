@@ -216,6 +216,8 @@ void SetupShader(const char* vertexShaderPath, const char* fragmentShaderPath)
 /************************************************************************/
 void RenderScene() 
 {
+    //clear DepthBuffer
+    glClear(GL_DEPTH_BUFFER_BIT);
     //toggle between wire frame and opaque view - for debugging purposes
     glPolygonMode(GL_FRONT_AND_BACK, sWireframe ? GL_LINE : GL_FILL);
     viewMatrix = glm::lookAt(
@@ -266,7 +268,7 @@ void Reshape(int width, int height)
 
     //create ProjectionMatrix
     float aspectRatio = static_cast<float>(width)/static_cast<float>(height);
-    glm::mat4 projectionMatrix = glm::perspective(35.0f, aspectRatio, 0.1f, 100.0f);//blindly copied values from https://stackoverflow.com/questions/8115352/glmperspective-explanation
+    glm::mat4 projectionMatrix = glm::perspective(35.0f, aspectRatio, 1.0f, 100.0f);//blindly copied values from https://stackoverflow.com/questions/8115352/glmperspective-explanation
     GLint uniformLocation(0);
 
     glUseProgram(shaderProgramID);
@@ -312,6 +314,9 @@ int main(int argc, char* argv[])
     glCullFace(GL_BACK);
     glFrontFace(GL_CCW);
 
+    //activate DepthBuffer
+    glEnable(GL_DEPTH_TEST);
+
     //init glew
     GLenum glew_err = glewInit();
     if (glew_err != GLEW_NO_ERROR) {
@@ -325,10 +330,10 @@ int main(int argc, char* argv[])
 
     Sphere* sky = new Sphere(0.5);
     sky->setShaderProgramm(shaderProgramID);
-    addDrawable(sky);
     Cube* cube = new Cube();
     cube->setShaderProgramm(shaderProgramID);
     cube->scale(1,1,1);
+    addDrawable(sky);
     addDrawable(cube);
 
     //enter main loop
