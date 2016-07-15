@@ -9,7 +9,14 @@
 #include "Sphere.h"
 
 class Sky: public Sphere {
+public:
+    Sky();
 
+private:
+    void addColorVertices();
+    std::vector<glm::vec4> colorSubVertices(std::vector<glm::vec4> triangle, int iterations);
+    void colorize();
+    void createGeometry();
 };
 
 

@@ -62,8 +62,6 @@ void Sphere::addVertices(std::vector<vec3> &vertexArray) {
     std::vector<vec3> vertexArrayBottomRight;
     std::vector<vec3> vertexArrayBottomBack;
 
-    const int detailIterations = 5;
-
     //add und split triangles
     //TopFront
     vertexArrayTopFront.push_back(top);
@@ -192,16 +190,70 @@ std::vector<vec3> Sphere::splitTriangle(std::vector<vec3> &threePoints, unsigned
 
     if (iterations > 0){
         iterations--;
-        triangleBDE = splitTriangle(triangleBDE, iterations);//upper Triangle first for painting
         triangleAFD = splitTriangle(triangleAFD, iterations);
         triangleDFE = splitTriangle(triangleDFE, iterations);
         triangleEFC = splitTriangle(triangleEFC, iterations);
-            }
-    resultTriangle.insert(resultTriangle.end(), triangleBDE.begin(), triangleBDE.end());
+        triangleBDE = splitTriangle(triangleBDE, iterations);
+    }
     resultTriangle.insert(resultTriangle.end(), triangleAFD.begin(), triangleAFD.end());
     resultTriangle.insert(resultTriangle.end(), triangleDFE.begin(), triangleDFE.end());
     resultTriangle.insert(resultTriangle.end(), triangleEFC.begin(), triangleEFC.end());
+    resultTriangle.insert(resultTriangle.end(), triangleBDE.begin(), triangleBDE.end());
     return  resultTriangle;
+    /*
+    if(threePoints.size() != 3){
+        assert(false);
+    }
+    //      B
+    //     / \
+    //    /   \
+    //   D ___ E
+    //  / \   / \
+    // /   \ /   \
+    //A_____F_____C
+    //
+    std::vector<vec3> triangleDAF;
+    std::vector<vec3> triangleDFE;
+    std::vector<vec3> triangleEFC;
+    std::vector<vec3> triangleBDE;
+    std::vector<vec3> resultTriangle;
+    glm::vec3 a = threePoints[0];
+    glm::vec3 b = threePoints[2];
+    glm::vec3 c = threePoints[1];
+    glm::vec3 d = a + (b-a)/2.0f;
+    glm::vec3 e = c + (b-c)/2.0f;
+    glm::vec3 f = a + (c-a)/2.0f;
+
+    triangleBDE.push_back(d);
+    triangleBDE.push_back(e);
+    triangleBDE.push_back(b);
+
+    triangleDAF.push_back(a);
+    triangleDAF.push_back(f);
+    triangleDAF.push_back(d);
+
+    triangleDFE.push_back(f);
+    triangleDFE.push_back(e);
+    triangleDFE.push_back(d);
+
+    triangleEFC.push_back(f);
+    triangleEFC.push_back(c);
+    triangleEFC.push_back(e);
+
+    if (iterations > 0){
+        iterations--;
+        triangleBDE = splitTriangle(triangleBDE, iterations);//upper Triangle first for painting
+        triangleDAF = splitTriangle(triangleDAF, iterations);
+        triangleDFE = splitTriangle(triangleDFE, iterations);
+        triangleEFC = splitTriangle(triangleEFC, iterations);
+            }
+
+    resultTriangle.insert(resultTriangle.end(), triangleDAF.begin(), triangleDAF.end());
+    resultTriangle.insert(resultTriangle.end(), triangleEFC.begin(), triangleEFC.end());
+    resultTriangle.insert(resultTriangle.end(), triangleDFE.begin(), triangleDFE.end());
+    resultTriangle.insert(resultTriangle.end(), triangleBDE.begin(), triangleBDE.end());
+    return  resultTriangle;
+    */
 }
 
 

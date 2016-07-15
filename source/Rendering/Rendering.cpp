@@ -10,6 +10,7 @@
 #include "Sphere.h"
 #include "Cube.h"
 #include "ShaderCompiler.h"
+#include "Sky.h"
 
 
 
@@ -250,12 +251,11 @@ void draw() {
 }
 
 void setUpObjects() {
-    Sphere* sky = new Sphere(0.5);
+    Sky* sky = new Sky();
     sky->setShaderProgramm(shaderProgramID);
     Cube* cube = new Cube();
     cube->setShaderProgramm(shaderProgramID);
     cube->scale(1,1,1);
-    sky->scale(-1.0f);
     addDrawable(sky);
     addDrawable(cube);
 }
