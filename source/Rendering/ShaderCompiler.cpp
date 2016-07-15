@@ -4,7 +4,6 @@
 
 #include <assert.h>
 #include "ShaderCompiler.h"
-#include <iostream>
 
 const std::string ShaderCompiler::linkerTopic = "Link Program";
 const std::string ShaderCompiler::validateTopic = "Validate Program";

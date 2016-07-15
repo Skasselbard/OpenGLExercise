@@ -1,21 +1,12 @@
 #include "Precompiled.h"
 #include "Rendering.h"
 
-//standard libraries
-#include <cstdlib>
-#include <memory>
-#include <algorithm> 
-#include <string>
-
 //vector and matrix calculation
-#include <glm/glm.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtx/constants.hpp>
-#include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/matrix_inverse.hpp"
 
 //texture wrapper
-#include "Helper.h"
 #include "Sphere.h"
 #include "Cube.h"
 #include "ShaderCompiler.h"
