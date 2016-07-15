@@ -13,9 +13,6 @@ public:
     Sphere(float radius);
     void draw();
 
-protected:
-    std::vector<GLfloat> vertices;
-
 private:
     float radius;
     //create an empty list of vertices
