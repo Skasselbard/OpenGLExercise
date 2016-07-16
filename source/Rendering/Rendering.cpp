@@ -276,7 +276,7 @@ void setUpObjects() {
     sphere->setColor(glm::vec4(0.0,0.0,1.0,1.0));
 
     ground->scale(25,1,25);
-    sphere->translate(500,100,-800);
+    //sphere->translate(500,100,-800);
     octaeder->translate(10,1,-20);
     cube->translate(2,1,-5);
 

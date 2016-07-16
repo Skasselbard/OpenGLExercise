@@ -175,7 +175,7 @@ std::vector<vec3> Sphere::splitTriangle(std::vector<vec3> &threePoints, unsigned
 
 std::vector<vec4> Sphere::crerateColorVertices() {
     std::vector<vec4> colorVector;
-    for(int i = 0; i < 8*3*pow(4.0f, (float)detailIterations); i++) {
+    for(int i = 0; i < 8*pow(4.0f, ((float)detailIterations+1.0f)); i++) {
         colorVector.push_back(glm::vec4(0.0f,1.0f,0.0f,1.0f));
     }
     return colorVector;
@@ -187,7 +187,7 @@ Sphere::Sphere(float radius, GLint detailIterations): Sphere(radius) {
 
 std::vector<vec4> Sphere::crerateColorVertices(vec4 color) {
     std::vector<vec4> colorVector;
-    for(int i = 0; i < 8*3*pow(4.0f, (float)detailIterations); i++) {
+    for(int i = 0; i < 8*pow(4.0f, ((float)detailIterations+1.0f)); i++) {
         colorVector.push_back(color);
     }
     return colorVector;
