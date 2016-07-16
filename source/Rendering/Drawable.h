@@ -14,7 +14,6 @@ public:
     void scale(float xyz);
     virtual void translate(float x, float y, float z);
     void setShaderProgramm(GLint ShaderProgramID);
-    virtual std::string className()=0;
     void setModelMatrix(mat4 *matrix);
     void setViewMatrix(mat4 *matrix);
     void setProjectionMatrix(mat4 *matrix);

@@ -27,7 +27,6 @@ glm::vec3 position = glm::vec3(1.0f,0.0f,10.0f);
 glm::vec3 lookAtVector = glm::vec3(0.5f,0.5f,0.0f);
 glm::vec3 upVector = glm::vec3(0.0f,1.0f,0.0f);
 
-GLuint vertexArrayObject = 0;
 const char *vertexShaderPath;
 const char *fragmentShaderPath;
 std::vector<Drawable*> objectList;
@@ -276,17 +275,15 @@ void setUpObjects() {
     sphere->setColor(glm::vec4(0.0,0.0,1.0,1.0));
 
     ground->scale(25,1,25);
-    //sphere->translate(500,100,-800);
-    octaeder->translate(10,1,-20);
+    sphere->translate(500,100,-800);
+    octaeder->translate(1000,150,-1000);
     cube->translate(2,1,-5);
-
 
     addDrawable(sky);
     addDrawable(ground);
     addDrawable(sphere);
     addDrawable(octaeder);
     addDrawable(cube);
-
 }
 
 void setProjectionMatrices() {

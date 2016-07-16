@@ -12,8 +12,6 @@ class Sphere: public Drawable {
 public:
     Sphere(float radius);
     Sphere(float radius, GLint detailIterations);
-    virtual std::string className(){return std::string("Sphere");};
-
 protected:
     float radius;
     int detailIterations = 5;

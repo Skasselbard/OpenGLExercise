@@ -10,7 +10,6 @@
 class Cube: public Drawable{
 public:
     Cube();
-    virtual std::string className(){return std::string("Cube");}
 private:
     std::vector<vec3> createPositionVertices();
     std::vector<vec4> crerateColorVertices();
