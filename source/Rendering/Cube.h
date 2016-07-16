@@ -10,12 +10,11 @@
 class Cube: public Drawable{
 public:
     Cube();
-    void draw();
     virtual std::string className(){return std::string("Cube");}
 private:
-    void createGeometry(void);
-    void addCubeVertices(std::vector<vec3> &vertexArray);
-    void colorise(std::vector<vec4> &colorArray);
+    std::vector<vec3> createPositionVertices();
+    std::vector<vec4> crerateColorVertices();
+    std::vector<vec4> crerateColorVertices(vec4 color);
 };
 
 #endif //AUFGABE_MOVEMENT_H

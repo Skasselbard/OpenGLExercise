@@ -246,7 +246,7 @@ void addDrawable(Drawable* drawable) {
 
 void draw() {
     for (int i = 0; i < objectList.size(); i++){
-        if (objectList[i]->className() == Sky().className()){
+        if (dynamic_cast<Sky*>(objectList[i])){
             ((Sky*)objectList[i])->calculateViewMatrix(lookAtVector,position);
             ((Sky*)objectList[i])->draw();
         }else {
@@ -256,16 +256,37 @@ void draw() {
 }
 
 void setUpObjects() {
-    GLint cubeShader = ShaderCompiler::compileShader(vertexShaderPath,fragmentShaderPath);
+    GLint defaultShader = ShaderCompiler::compileShader(vertexShaderPath,fragmentShaderPath);
     GLint skyShader = ShaderCompiler::compileShader(vertexShaderPath,fragmentShaderPath);
+
     Sky* sky = new Sky();
-    sky->setShaderProgramm(skyShader);
+    Cube* ground = new Cube();
     Cube* cube = new Cube();
-    cube->setShaderProgramm(cubeShader);
-    cube->scale(25,1,25);
+    Sphere* sphere = new Sphere(1);
+    Sphere* octaeder = new Sphere(1,0);
+
+    sky->setShaderProgramm(skyShader);
+    ground->setShaderProgramm(defaultShader);
+    sphere->setShaderProgramm(defaultShader);
+    octaeder->setShaderProgramm(defaultShader);
+    cube->setShaderProgramm(defaultShader);
+
+    cube->setColor(glm::vec4(1.0,1.0,0.0,1.0));
+    octaeder->setColor(glm::vec4(0.0,1.0,0.0,1.0));
+    sphere->setColor(glm::vec4(0.0,0.0,1.0,1.0));
+
+    ground->scale(25,1,25);
+    sphere->translate(500,100,-800);
+    octaeder->translate(10,1,-20);
+    cube->translate(2,1,-5);
+
+
     addDrawable(sky);
+    addDrawable(ground);
+    addDrawable(sphere);
+    addDrawable(octaeder);
     addDrawable(cube);
-    sky->setProjectionMatrix(&projectionMatrix);
+
 }
 
 void setProjectionMatrices() {
@@ -276,7 +297,7 @@ void setProjectionMatrices() {
 
 void setViewMatrices() {
     for (int i = 0; i < objectList.size(); i++){
-        if (objectList[i]->className() != Sky().className()){
+        if (!dynamic_cast<Sky*>(objectList[i])){
             objectList[i]->setViewMatrix(&viewMatrix);
         }
 

@@ -16,10 +16,8 @@ public:
     void draw();
 
 private:
-    void addColorVertices();
+    virtual std::vector<vec4> crerateColorVertices();
     std::vector<glm::vec4> colorSubVertices(std::vector<glm::vec4> triangle, int iterations);
-    void colorize();
-    void createGeometry();
 };
 
 

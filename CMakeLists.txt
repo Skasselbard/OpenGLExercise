@@ -23,7 +23,14 @@ set(SOURCE_FILES
         source/Rendering/Drawable.cpp
         source/Rendering/Drawable.h
         source/Rendering/Sphere.cpp
-        source/Rendering/Sphere.h source/Rendering/ShaderCompiler.cpp source/Rendering/ShaderCompiler.h source/Rendering/Sky.cpp source/Rendering/Sky.h)
+        source/Rendering/Sphere.h
+        source/Rendering/ShaderCompiler.cpp
+        source/Rendering/ShaderCompiler.h
+        source/Rendering/Sky.cpp
+        source/Rendering/Sky.h
+        #source/Rendering/Pyramid.cpp
+        #source/Rendering/Pyramid.h
+        )
 
 
 

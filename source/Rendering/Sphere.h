@@ -11,16 +11,15 @@
 class Sphere: public Drawable {
 public:
     Sphere(float radius);
-    void draw();
+    Sphere(float radius, GLint detailIterations);
     virtual std::string className(){return std::string("Sphere");};
 
 protected:
     float radius;
-    std::vector<vec3> vertexArray;
-    const int detailIterations = 5;
-    std::vector<vec4> colorArray;
-    virtual void createGeometry();
-    void addVertices(std::vector<vec3> &vertexArray);
+    int detailIterations = 5;
+    virtual std::vector<vec3> createPositionVertices();
+    virtual std::vector<vec4> crerateColorVertices();
+    virtual std::vector<vec4> crerateColorVertices(vec4 color);
 
 private:
     std::vector<vec3> splitTriangle(std::vector<vec3> &threePoints, unsigned int iterations);

@@ -5,51 +5,13 @@
 #include <glm/gtx/transform.hpp>
 #include "Sphere.h"
 
-Sphere::Sphere(float radius) {
+Sphere::Sphere(float radius) : Drawable(){
     this->radius=radius;
     modelMatrix = new mat4(1.0f);
 }
 
-void Sphere::draw() {
-    glUseProgram(shaderProgramID);
-    GLint uniformLocation(0);
-    uniformLocation = glGetUniformLocation(shaderProgramID, "modelMatrix");
-    glUniformMatrix4fv(uniformLocation, 1, false, &(*modelMatrix)[0][0]);
-    uniformLocation = glGetUniformLocation(shaderProgramID, "viewMatrix");
-    glUniformMatrix4fv(uniformLocation, 1, false, &(*viewMatrix)[0][0]);
-    uniformLocation = glGetUniformLocation(shaderProgramID, "projectionMatrix");
-    glUniformMatrix4fv(uniformLocation, 1, false, &(*projectionMatrix)[0][0]);
-    glBindVertexArray(vertexArrayObject);
-    glDrawArrays(GL_TRIANGLES, 0, vertexArray.size());
-    glBindVertexArray(0);
-    glUseProgram(0);
-}
-
-void Sphere::createGeometry() {
-    addVertices(vertexArray);
-    //vertex array object -- wraps up geometry and consists of multiple vertex buffer objects and their stats
-    glGenVertexArrays(1, &vertexArrayObject);
-    glBindVertexArray(vertexArrayObject);
-    //create vertex buffer object -- a list of vertices, normals etc. In this case wraps up list of vertices. It exists on GPU side and allows transferring geometry data from CPU to GPU
-    GLuint vboVertex;
-    glGenBuffers(1, &vboVertex);
-    glBindBuffer(GL_ARRAY_BUFFER, vboVertex);
-    //transfer vertices
-    //void glBufferData(GLenum  target, GLsizeiptr  size, const GLvoid *  data, GLenum  usage);
-    glBufferData(GL_ARRAY_BUFFER, vertexArray.size() * sizeof(vec3), vertexArray.data(), GL_STATIC_DRAW);
-    //get attribute index for variable vsPosition
-    GLint attributeIndex = glGetAttribLocation(shaderProgramID, "vsPosition");
-    //tell GPU how to interpret this data for the specified attribute
-    glVertexAttribPointer(attributeIndex, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-    //activate this attribute
-    glEnableVertexAttribArray(attributeIndex);
-    //unbind vbo -- saves all stats given to this objects until this point
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    //unbind vertex array objects -- saves all stats given to this objects until this point
-    glBindVertexArray(0);
-}
-
-void Sphere::addVertices(std::vector<vec3> &vertexArray) {
+std::vector<vec3> Sphere::createPositionVertices() {
+    std::vector<vec3> vertexArray;
     //vertex positions
     const glm::vec3 top         = glm::vec3(0.0f,radius,0.0f);
     const glm::vec3 bottom      = glm::vec3(0.0f,-radius,0.0f);
@@ -128,6 +90,7 @@ void Sphere::addVertices(std::vector<vec3> &vertexArray) {
     }
     //scale to fit radius
     scale(1.0f/scalefactor);
+    return vertexArray;
 }
 /**
  * from this nice post
@@ -154,57 +117,87 @@ vec3 Sphere::normalize(vec3 fixpoint, vec3 point, float radius) {
  * split one Triangle into 4 triangles - triforce style!
  */
 std::vector<vec3> Sphere::splitTriangle(std::vector<vec3> &threePoints, unsigned int iterations) {
-    if(threePoints.size() != 3){
-        assert(false);
-    }
-    //      B
-    //     / \
-    //    /   \
-    //   D ___ E
-    //  / \   / \
-    // /   \ /   \
-    //A_____F_____C
-    //
-    std::vector<vec3> triangleAFD;
-    std::vector<vec3> triangleDFE;
-    std::vector<vec3> triangleEFC;
-    std::vector<vec3> triangleBDE;
-    std::vector<vec3> resultTriangle;
-    glm::vec3 a = threePoints[0];
-    glm::vec3 b = threePoints[2];
-    glm::vec3 c = threePoints[1];
-    glm::vec3 d = a + (b-a)/2.0f;
-    glm::vec3 e = c + (b-c)/2.0f;
-    glm::vec3 f = a + (c-a)/2.0f;
 
-    triangleAFD.push_back(a);
-    triangleAFD.push_back(f);
-    triangleAFD.push_back(d);
-
-    triangleEFC.push_back(f);
-    triangleEFC.push_back(c);
-    triangleEFC.push_back(e);
-
-    triangleDFE.push_back(e);
-    triangleDFE.push_back(d);
-    triangleDFE.push_back(f);
-
-    triangleBDE.push_back(d);
-    triangleBDE.push_back(e);
-    triangleBDE.push_back(b);
-    if (iterations > 0){
+    std::vector<vec3> resultTriangle = threePoints;
+    if (iterations > 0) {
+        if (threePoints.size() != 3) {
+            assert(false);
+        }
         iterations--;
+
+        //      B
+        //     / \
+        //    /   \
+        //   D ___ E
+        //  / \   / \
+        // /   \ /   \
+        //A_____F_____C
+        //
+        std::vector<vec3> triangleAFD;
+        std::vector<vec3> triangleDFE;
+        std::vector<vec3> triangleEFC;
+        std::vector<vec3> triangleBDE;
+        glm::vec3 a = threePoints[0];
+        glm::vec3 b = threePoints[2];
+        glm::vec3 c = threePoints[1];
+        glm::vec3 d = a + (b - a) / 2.0f;
+        glm::vec3 e = c + (b - c) / 2.0f;
+        glm::vec3 f = a + (c - a) / 2.0f;
+
+        triangleAFD.push_back(a);
+        triangleAFD.push_back(f);
+        triangleAFD.push_back(d);
+
+        triangleEFC.push_back(f);
+        triangleEFC.push_back(c);
+        triangleEFC.push_back(e);
+
+        triangleDFE.push_back(e);
+        triangleDFE.push_back(d);
+        triangleDFE.push_back(f);
+
+        triangleBDE.push_back(d);
+        triangleBDE.push_back(e);
+        triangleBDE.push_back(b);
+
         triangleAFD = splitTriangle(triangleAFD, iterations);
         triangleDFE = splitTriangle(triangleDFE, iterations);
         triangleEFC = splitTriangle(triangleEFC, iterations);
         triangleBDE = splitTriangle(triangleBDE, iterations);
+
+        resultTriangle.insert(resultTriangle.end(), triangleAFD.begin(), triangleAFD.end());
+        resultTriangle.insert(resultTriangle.end(), triangleEFC.begin(), triangleEFC.end());
+        resultTriangle.insert(resultTriangle.end(), triangleDFE.begin(), triangleDFE.end());
+        resultTriangle.insert(resultTriangle.end(), triangleBDE.begin(), triangleBDE.end());
     }
-    resultTriangle.insert(resultTriangle.end(), triangleAFD.begin(), triangleAFD.end());
-    resultTriangle.insert(resultTriangle.end(), triangleEFC.begin(), triangleEFC.end());
-    resultTriangle.insert(resultTriangle.end(), triangleDFE.begin(), triangleDFE.end());
-    resultTriangle.insert(resultTriangle.end(), triangleBDE.begin(), triangleBDE.end());
     return  resultTriangle;
 }
+
+std::vector<vec4> Sphere::crerateColorVertices() {
+    std::vector<vec4> colorVector;
+    for(int i = 0; i < 8*3*pow(4.0f, (float)detailIterations); i++) {
+        colorVector.push_back(glm::vec4(0.0f,1.0f,0.0f,1.0f));
+    }
+    return colorVector;
+}
+
+Sphere::Sphere(float radius, GLint detailIterations): Sphere(radius) {
+    this->detailIterations = detailIterations;
+}
+
+std::vector<vec4> Sphere::crerateColorVertices(vec4 color) {
+    std::vector<vec4> colorVector;
+    for(int i = 0; i < 8*3*pow(4.0f, (float)detailIterations); i++) {
+        colorVector.push_back(color);
+    }
+    return colorVector;
+}
+
+
+
+
+
+
 
 
 

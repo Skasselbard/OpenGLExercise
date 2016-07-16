@@ -3,65 +3,7 @@
 //
 #include "Cube.h"
 
-void Cube::createGeometry(void) {
-    //create an empty list of vertices
-    std::vector<vec3> vertexArray;
-
-    addCubeVertices(vertexArray);
-
-    //vertex array object -- wraps up geometry and consists of multiple vertex buffer objects and their stats
-    glGenVertexArrays(1, &vertexArrayObject);
-    glBindVertexArray(vertexArrayObject);
-
-    //create vertex buffer object -- a list of vertices, normals etc. In this case wraps up list of vertices. It exists on GPU side and allows transferring geometry data from CPU to GPU
-    GLuint vboVertex;
-    glGenBuffers(1, &vboVertex);
-    glBindBuffer(GL_ARRAY_BUFFER, vboVertex);
-
-    //transfer vertices
-    //void glBufferData(GLenum  target, GLsizeiptr  size, const GLvoid *  data, GLenum  usage);
-    glBufferData(GL_ARRAY_BUFFER, vertexArray.size() * sizeof(vec3), vertexArray.data(), GL_STATIC_DRAW);
-
-    //get attribute index for variable vsPosition
-    GLint attributeIndex = glGetAttribLocation(shaderProgramID, "vsPosition");
-
-    //tell GPU how to interpret this data for the specified attribute
-    glVertexAttribPointer(attributeIndex, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-
-    //activate this attribute
-    glEnableVertexAttribArray(attributeIndex);
-
-    //unbind vbo -- saves all stats given to this objects until this point
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    //create empty list of color attributes
-    std::vector<vec4> color;
-    colorise(color);
-
-    //create another vertex buffer object -- a list of color attributes for each vertex. Must have the same number of elements, as the vertex list
-    GLuint vboColor;
-    glGenBuffers(1, &vboColor);
-    glBindBuffer(GL_ARRAY_BUFFER, vboColor);
-
-    //transfer color attributes
-    glBufferData(GL_ARRAY_BUFFER, color.size() * sizeof(vec4), color.data(), GL_STATIC_DRAW);
-
-    //get attribute index for variable vsPosition
-    attributeIndex = glGetAttribLocation(shaderProgramID, "vsColor");
-
-    //tell GPU how to interpret this data for the specified attribute
-    glVertexAttribPointer(attributeIndex, 4, GL_FLOAT, GL_FALSE, 0, NULL);
-
-    //activate this attribute
-    glEnableVertexAttribArray(attributeIndex);
-
-
-    //unbind vertex array objects -- saves all stats given to this objects until this point
-    glBindVertexArray(0);
-
-}
-
-void Cube::addCubeVertices(std::vector<vec3> &vertexArray) {
+std::vector<vec3> Cube::createPositionVertices() {
     //http://stackoverflow.com/a/8142461
     //    6---7
     //   /|  /|
@@ -77,6 +19,8 @@ void Cube::addCubeVertices(std::vector<vec3> &vertexArray) {
     const vec3 backRightBottom    = vec3(1.0, 0.0, -1.0);//5
     const vec3 backLeftTop        = vec3(0.0, 1.0, -1.0);//6
     const vec3 backRightTop       = vec3(1.0, 1.0, -1.0);//7
+
+    std::vector<vec3> vertexArray;
 
     //Top
     //627
@@ -143,16 +87,19 @@ void Cube::addCubeVertices(std::vector<vec3> &vertexArray) {
     vertexArray.push_back(backRightBottom);
     vertexArray.push_back(backRightTop);
     //end Right
+
+    return vertexArray;
 }
 
-void Cube::colorise(std::vector<vec4> &colorArray) {
+std::vector<vec4> Cube::crerateColorVertices() {
+    std::vector<vec4> colorArray;
     for (float i=0; i < 6; i++){
         for (int j = 0; j<6; j++) {
             if (i == 0)
                 colorArray.push_back(vec4(1,0,0,1));
-            if (i == 1)
-                colorArray.push_back(vec4(0,1,0,1));
             if (i == 2)
+                colorArray.push_back(vec4(0,1,0,1));
+            if (i == 1)
                 colorArray.push_back(vec4(0,0,1,1));
             if (i == 3)
                 colorArray.push_back(vec4(1,1,0,1));
@@ -162,30 +109,22 @@ void Cube::colorise(std::vector<vec4> &colorArray) {
                 colorArray.push_back(vec4(0,1,1,1));
         }
     }
+    return colorArray;
 }
 
-void Cube::draw() {
-    //createGeometry();
-    glUseProgram(shaderProgramID);
-
-    GLint uniformLocation(0);
-    uniformLocation = glGetUniformLocation(shaderProgramID, "modelMatrix");
-    glUniformMatrix4fv(uniformLocation, 1, false, &(*modelMatrix)[0][0]);
-    uniformLocation = glGetUniformLocation(shaderProgramID, "viewMatrix");
-    glUniformMatrix4fv(uniformLocation, 1, false, &(*viewMatrix)[0][0]);
-    uniformLocation = glGetUniformLocation(shaderProgramID, "projectionMatrix");
-    glUniformMatrix4fv(uniformLocation, 1, false, &(*projectionMatrix)[0][0]);
-
-    glBindVertexArray(vertexArrayObject);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-    glBindVertexArray(0);
-
-    glUseProgram(0);
+Cube::Cube() : Drawable(){
 }
 
-Cube::Cube() {
-    modelMatrix = new mat4(1.0f);
-}
+std::vector<vec4> Cube::crerateColorVertices(vec4 color) {
+    std::vector<vec4> colorArray;
+    for (float i=0; i < 6; i++){
+        for (int j = 0; j<6; j++) {
+                colorArray.push_back(color);
+        }
+    }
+    return colorArray;}
+
+
 
 
 
