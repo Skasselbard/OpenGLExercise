@@ -170,7 +170,11 @@ void Cube::draw() {
 
     GLint uniformLocation(0);
     uniformLocation = glGetUniformLocation(shaderProgramID, "modelMatrix");
-    glUniformMatrix4fv(uniformLocation, 1, false, &modelMatrix[0][0]);
+    glUniformMatrix4fv(uniformLocation, 1, false, &(*modelMatrix)[0][0]);
+    uniformLocation = glGetUniformLocation(shaderProgramID, "viewMatrix");
+    glUniformMatrix4fv(uniformLocation, 1, false, &(*modelMatrix)[0][0]);
+    uniformLocation = glGetUniformLocation(shaderProgramID, "projectionMatrix");
+    glUniformMatrix4fv(uniformLocation, 1, false, &(*projectionMatrix)[0][0]);
 
     glBindVertexArray(vertexArrayObject);
     glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -180,7 +184,7 @@ void Cube::draw() {
 }
 
 Cube::Cube() {
-
+    modelMatrix = new mat4(1.0f);
 }
 
 

@@ -7,13 +7,18 @@
 
 Sphere::Sphere(float radius) {
     this->radius=radius;
+    modelMatrix = new mat4(1.0f);
 }
 
 void Sphere::draw() {
     glUseProgram(shaderProgramID);
     GLint uniformLocation(0);
     uniformLocation = glGetUniformLocation(shaderProgramID, "modelMatrix");
-    glUniformMatrix4fv(uniformLocation, 1, false, &modelMatrix[0][0]);
+    glUniformMatrix4fv(uniformLocation, 1, false, &(*modelMatrix)[0][0]);
+    uniformLocation = glGetUniformLocation(shaderProgramID, "viewMatrix");
+    glUniformMatrix4fv(uniformLocation, 1, false, &(*modelMatrix)[0][0]);
+    uniformLocation = glGetUniformLocation(shaderProgramID, "projectionMatrix");
+    glUniformMatrix4fv(uniformLocation, 1, false, &(*projectionMatrix)[0][0]);
     glBindVertexArray(vertexArrayObject);
     glDrawArrays(GL_TRIANGLES, 0, vertexArray.size());
     glBindVertexArray(0);

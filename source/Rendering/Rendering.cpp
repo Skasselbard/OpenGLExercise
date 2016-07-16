@@ -20,9 +20,12 @@
 
 GLint shaderProgramID = 0;
 glm::mat4 viewMatrix = glm::mat4(1.0);
+glm::mat4 projectionMatrix;
 
 const float moveModifier = 0.1;//to scale movementspeed
-glm::vec3 position = glm::vec3(1.0,0.0,10.0);
+glm::vec3 position = glm::vec3(1.0f,0.0f,10.0f);
+glm::vec3 lookAtVector = glm::vec3(0.5f,0.5f,0.0f);
+glm::vec3 upVector = glm::vec3(0.0f,1.0f,0.0f);
 
 GLuint vertexArrayObject = 0;
 const char *vertexShaderPath;
@@ -126,22 +129,28 @@ void RenderScene()
 {
     //clear DepthBuffer
     glClear(GL_DEPTH_BUFFER_BIT);
+
     //toggle between wire frame and opaque view - for debugging purposes
     glPolygonMode(GL_FRONT_AND_BACK, sWireframe ? GL_LINE : GL_FILL);
     viewMatrix = glm::lookAt(
             position,
-            glm::vec3((float)0.5,(float)0.5,(float)0.0), // and looks at the origin
-            glm::vec3((float)0.0,(float)1.0,(float)0.0)  // Head is up (set to 0,-1,0 to look upside-down)
+            lookAtVector, // and looks at the origin
+            upVector
     );
+    setViewMatrices();
     //renders triangle
     glUseProgram(shaderProgramID);
 
     GLint uniformLocation(0);
     uniformLocation = glGetUniformLocation(shaderProgramID, "viewMatrix");
     glUniformMatrix4fv(uniformLocation, 1, false, &viewMatrix[0][0]);
+    uniformLocation = glGetUniformLocation(shaderProgramID, "modelMatrix");
+    glUniformMatrix4fv(uniformLocation, 1, false, &glm::mat4(1.0f)[0][0]);
 
-    draw();
     glUseProgram(0);
+    draw();
+
+
 }
 
 
@@ -176,13 +185,14 @@ void Reshape(int width, int height)
 
     //create ProjectionMatrix
     float aspectRatio = static_cast<float>(width)/static_cast<float>(height);
-    glm::mat4 projectionMatrix = glm::perspective(35.0f, aspectRatio, 1.0f, 100.0f);//blindly copied values from https://stackoverflow.com/questions/8115352/glmperspective-explanation
+    projectionMatrix = glm::perspective(35.0f, aspectRatio, 1.0f, 100.0f);//blindly copied values from https://stackoverflow.com/questions/8115352/glmperspective-explanation
     GLint uniformLocation(0);
 
     glUseProgram(shaderProgramID);
     uniformLocation = glGetUniformLocation(shaderProgramID, "projectionMatrix");
     glUniformMatrix4fv(uniformLocation, 1, false, &projectionMatrix[0][0]);
     glUseProgram(0);
+    setProjectionMatrices();
 
 }
 
@@ -246,20 +256,44 @@ void addDrawable(Drawable* drawable) {
 
 void draw() {
     for (int i = 0; i < objectList.size(); i++){
+        if (objectList[i]->className() == Sky().className()){
+            ((Sky*)objectList[i])->calculateViewMatrix(lookAtVector,position);
+        }
         objectList[i]->draw();
     }
 }
 
 void setUpObjects() {
+    GLint cubeShader = ShaderCompiler::compileShader(vertexShaderPath,fragmentShaderPath);
+    GLint skyShader = ShaderCompiler::compileShader(vertexShaderPath,fragmentShaderPath);
     Sky* sky = new Sky();
-    sky->setShaderProgramm(shaderProgramID);
+    sky->setShaderProgramm(skyShader);
     Cube* cube = new Cube();
-    cube->setShaderProgramm(shaderProgramID);
-    cube->scale(1,1,1);
+    cube->setShaderProgramm(cubeShader);
+    cube->scale(25,1,25);
     addDrawable(sky);
     addDrawable(cube);
-
+    sky->setProjectionMatrix(&projectionMatrix);
 }
+
+void setProjectionMatrices() {
+    for (int i = 0; i < objectList.size(); i++){
+        objectList[i]->setProjectionMatrix(&projectionMatrix);
+    }
+}
+
+void setViewMatrices() {
+    for (int i = 0; i < objectList.size(); i++){
+        if (objectList[i]->className() != Sky().className()){
+            objectList[i]->setViewMatrix(&viewMatrix);
+        }
+
+    }
+}
+
+
+
+
 
 
 

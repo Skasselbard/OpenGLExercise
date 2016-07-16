@@ -35,3 +35,7 @@ void addDrawable(Drawable* drawable);
 void draw();
 
 void setUpObjects();
+
+void setProjectionMatrices();
+
+void setViewMatrices();

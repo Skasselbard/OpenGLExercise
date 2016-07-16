@@ -2,9 +2,11 @@
 // Created by tom on 15.07.16.
 //
 
+#include <glm/gtc/matrix_transform.hpp>
 #include "Sky.h"
 
 Sky::Sky() : Sphere(1){
+    viewMatrix = new mat4(1.0f);
     addColorVertices();
     //colorize();
     scale(-1.0f,1.0f,1.0f);
@@ -129,6 +131,31 @@ void Sky::createGeometry() {
     //unbind vertex array objects -- saves all stats given to this objects until this point
     glBindVertexArray(0);
 }
+
+void Sky::calculateViewMatrix(glm::vec3 looktat, glm::vec3 eye) {
+    *viewMatrix = glm::lookAt(
+            glm::vec3(0,0,0),
+            looktat-eye,
+            glm::vec3((float)0.0,(float)1.0,(float)0.0)  // Head is up (set to 0,-1,0 to look upside-down)
+    );
+}
+
+void Sky::draw() {
+        glUseProgram(shaderProgramID);
+    glDisable(GL_DEPTH_TEST);
+    glDepthMask(GL_FALSE);
+    GLint uniformLocation(0);
+    uniformLocation = glGetUniformLocation(shaderProgramID, "viewMatrix");
+    glUniformMatrix4fv(uniformLocation, 1, false, &(*viewMatrix)[0][0]);
+    uniformLocation = glGetUniformLocation(shaderProgramID, "projectionMatrix");
+    glUniformMatrix4fv(uniformLocation, 1, false, &(*projectionMatrix)[0][0]);
+    glUseProgram(0);
+    Sphere::draw();
+}
+
+
+
+
 
 
 
