@@ -5,7 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Sky.h"
 
-Sky::Sky() : Sphere(1){
+Sky::Sky() : Sphere(80){
     viewMatrix = new mat4(1.0f);
     addColorVertices();
     //colorize();
@@ -141,7 +141,7 @@ void Sky::calculateViewMatrix(glm::vec3 looktat, glm::vec3 eye) {
 }
 
 void Sky::draw() {
-        glUseProgram(shaderProgramID);
+    glUseProgram(shaderProgramID);
     glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
     GLint uniformLocation(0);

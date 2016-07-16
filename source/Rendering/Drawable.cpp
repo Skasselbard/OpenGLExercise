@@ -28,8 +28,6 @@ void Drawable::scale(float xyz) {
 
 void Drawable::setProjectionMatrix(mat4 *matrix) {
     projectionMatrix = matrix;
-    float aspectRatio = static_cast<float>(1000)/static_cast<float>(1000);
-    projectionMatrix = new mat4(1.0f);
 
 }
 

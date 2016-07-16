@@ -16,7 +16,7 @@ void Sphere::draw() {
     uniformLocation = glGetUniformLocation(shaderProgramID, "modelMatrix");
     glUniformMatrix4fv(uniformLocation, 1, false, &(*modelMatrix)[0][0]);
     uniformLocation = glGetUniformLocation(shaderProgramID, "viewMatrix");
-    glUniformMatrix4fv(uniformLocation, 1, false, &(*modelMatrix)[0][0]);
+    glUniformMatrix4fv(uniformLocation, 1, false, &(*viewMatrix)[0][0]);
     uniformLocation = glGetUniformLocation(shaderProgramID, "projectionMatrix");
     glUniformMatrix4fv(uniformLocation, 1, false, &(*projectionMatrix)[0][0]);
     glBindVertexArray(vertexArrayObject);

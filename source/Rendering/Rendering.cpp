@@ -138,16 +138,6 @@ void RenderScene()
             upVector
     );
     setViewMatrices();
-    //renders triangle
-    glUseProgram(shaderProgramID);
-
-    GLint uniformLocation(0);
-    uniformLocation = glGetUniformLocation(shaderProgramID, "viewMatrix");
-    glUniformMatrix4fv(uniformLocation, 1, false, &viewMatrix[0][0]);
-    uniformLocation = glGetUniformLocation(shaderProgramID, "modelMatrix");
-    glUniformMatrix4fv(uniformLocation, 1, false, &glm::mat4(1.0f)[0][0]);
-
-    glUseProgram(0);
     draw();
 
 
@@ -258,8 +248,10 @@ void draw() {
     for (int i = 0; i < objectList.size(); i++){
         if (objectList[i]->className() == Sky().className()){
             ((Sky*)objectList[i])->calculateViewMatrix(lookAtVector,position);
+            ((Sky*)objectList[i])->draw();
+        }else {
+            objectList[i]->draw();
         }
-        objectList[i]->draw();
     }
 }
 
