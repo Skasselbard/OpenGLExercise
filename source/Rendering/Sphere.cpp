@@ -86,24 +86,24 @@ void Sphere::addVertices(std::vector<vec3> &vertexArray) {
     vertexArrayTopBack.push_back(backLeft);
     vertexArrayTopBack= splitTriangle(vertexArrayTopBack, detailIterations);
     //BottomFront
+    vertexArrayBottomFront.push_back(bottom);
     vertexArrayBottomFront.push_back(frontRight);
     vertexArrayBottomFront.push_back(frontLeft);
-    vertexArrayBottomFront.push_back(bottom);
     vertexArrayBottomFront= splitTriangle(vertexArrayBottomFront, detailIterations);
     //BottomLeft
+    vertexArrayBottomLeft.push_back(bottom);
     vertexArrayBottomLeft.push_back(frontLeft);
     vertexArrayBottomLeft.push_back(backLeft);
-    vertexArrayBottomLeft.push_back(bottom);
     vertexArrayBottomLeft= splitTriangle(vertexArrayBottomLeft, detailIterations);
     //BottomRight
+    vertexArrayBottomRight.push_back(bottom);
     vertexArrayBottomRight.push_back(backRight);
     vertexArrayBottomRight.push_back(frontRight);
-    vertexArrayBottomRight.push_back(bottom);
     vertexArrayBottomRight= splitTriangle(vertexArrayBottomRight, detailIterations);
     //BottomBack
+    vertexArrayBottomBack.push_back(bottom);
     vertexArrayBottomBack.push_back(backLeft);
     vertexArrayBottomBack.push_back(backRight);
-    vertexArrayBottomBack.push_back(bottom);
     vertexArrayBottomBack= splitTriangle(vertexArrayBottomBack, detailIterations);
 
 
@@ -176,18 +176,17 @@ std::vector<vec3> Sphere::splitTriangle(std::vector<vec3> &threePoints, unsigned
     triangleAFD.push_back(f);
     triangleAFD.push_back(d);
 
-    triangleDFE.push_back(d);
-    triangleDFE.push_back(f);
-    triangleDFE.push_back(e);
-
+    triangleEFC.push_back(f);
     triangleEFC.push_back(c);
     triangleEFC.push_back(e);
-    triangleEFC.push_back(f);
 
+    triangleDFE.push_back(e);
+    triangleDFE.push_back(d);
+    triangleDFE.push_back(f);
+
+    triangleBDE.push_back(d);
     triangleBDE.push_back(e);
     triangleBDE.push_back(b);
-    triangleBDE.push_back(d);
-
     if (iterations > 0){
         iterations--;
         triangleAFD = splitTriangle(triangleAFD, iterations);
@@ -196,64 +195,10 @@ std::vector<vec3> Sphere::splitTriangle(std::vector<vec3> &threePoints, unsigned
         triangleBDE = splitTriangle(triangleBDE, iterations);
     }
     resultTriangle.insert(resultTriangle.end(), triangleAFD.begin(), triangleAFD.end());
-    resultTriangle.insert(resultTriangle.end(), triangleDFE.begin(), triangleDFE.end());
-    resultTriangle.insert(resultTriangle.end(), triangleEFC.begin(), triangleEFC.end());
-    resultTriangle.insert(resultTriangle.end(), triangleBDE.begin(), triangleBDE.end());
-    return  resultTriangle;
-    /*
-    if(threePoints.size() != 3){
-        assert(false);
-    }
-    //      B
-    //     / \
-    //    /   \
-    //   D ___ E
-    //  / \   / \
-    // /   \ /   \
-    //A_____F_____C
-    //
-    std::vector<vec3> triangleDAF;
-    std::vector<vec3> triangleDFE;
-    std::vector<vec3> triangleEFC;
-    std::vector<vec3> triangleBDE;
-    std::vector<vec3> resultTriangle;
-    glm::vec3 a = threePoints[0];
-    glm::vec3 b = threePoints[2];
-    glm::vec3 c = threePoints[1];
-    glm::vec3 d = a + (b-a)/2.0f;
-    glm::vec3 e = c + (b-c)/2.0f;
-    glm::vec3 f = a + (c-a)/2.0f;
-
-    triangleBDE.push_back(d);
-    triangleBDE.push_back(e);
-    triangleBDE.push_back(b);
-
-    triangleDAF.push_back(a);
-    triangleDAF.push_back(f);
-    triangleDAF.push_back(d);
-
-    triangleDFE.push_back(f);
-    triangleDFE.push_back(e);
-    triangleDFE.push_back(d);
-
-    triangleEFC.push_back(f);
-    triangleEFC.push_back(c);
-    triangleEFC.push_back(e);
-
-    if (iterations > 0){
-        iterations--;
-        triangleBDE = splitTriangle(triangleBDE, iterations);//upper Triangle first for painting
-        triangleDAF = splitTriangle(triangleDAF, iterations);
-        triangleDFE = splitTriangle(triangleDFE, iterations);
-        triangleEFC = splitTriangle(triangleEFC, iterations);
-            }
-
-    resultTriangle.insert(resultTriangle.end(), triangleDAF.begin(), triangleDAF.end());
     resultTriangle.insert(resultTriangle.end(), triangleEFC.begin(), triangleEFC.end());
     resultTriangle.insert(resultTriangle.end(), triangleDFE.begin(), triangleDFE.end());
     resultTriangle.insert(resultTriangle.end(), triangleBDE.begin(), triangleBDE.end());
     return  resultTriangle;
-    */
 }
 
 

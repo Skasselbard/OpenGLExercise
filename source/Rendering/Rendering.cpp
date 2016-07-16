@@ -258,6 +258,7 @@ void setUpObjects() {
     cube->scale(1,1,1);
     addDrawable(sky);
     addDrawable(cube);
+
 }
 
 

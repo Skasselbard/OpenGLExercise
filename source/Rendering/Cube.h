@@ -11,6 +11,7 @@ class Cube: public Drawable{
 public:
     Cube();
     void draw();
+    virtual std::string className(){return std::string("Cube");}
 private:
     void createGeometry(void);
     void addCubeVertices(std::vector<vec3> &vertexArray);

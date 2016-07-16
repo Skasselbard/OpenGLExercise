@@ -11,6 +11,8 @@
 class Sky: public Sphere {
 public:
     Sky();
+    virtual std::string className(){return std::string("Sphere");}
+
 
 private:
     void addColorVertices();

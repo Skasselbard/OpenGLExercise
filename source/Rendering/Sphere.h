@@ -12,11 +12,12 @@ class Sphere: public Drawable {
 public:
     Sphere(float radius);
     void draw();
+    virtual std::string className(){return std::string("Sphere");};
 
 protected:
     float radius;
     std::vector<vec3> vertexArray;
-    const int detailIterations = 2;
+    const int detailIterations = 5;
     std::vector<vec4> colorArray;
     virtual void createGeometry();
     void addVertices(std::vector<vec3> &vertexArray);

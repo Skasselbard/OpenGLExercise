@@ -7,6 +7,7 @@
 Sky::Sky() : Sphere(1){
     addColorVertices();
     //colorize();
+    scale(-1.0f,1.0f,1.0f);
 }
 
 void Sky::addColorVertices() {
@@ -24,7 +25,12 @@ void Sky::addColorVertices() {
         colorArray.insert(colorArray.end(), triangle.begin(), triangle.end());
     }
     for (int i = 0; i<4; i++){//Bottom 4 surfaces
-
+        std::vector<vec4> triangle;
+        triangle.push_back(bottomColor);
+        triangle.push_back(middleColor);
+        triangle.push_back(middleColor);
+        triangle = colorSubVertices(triangle, detailIterations);
+        colorArray.insert(colorArray.end(), triangle.begin(), triangle.end());
     }
 }
 
@@ -35,40 +41,37 @@ std::vector<glm::vec4> Sky::colorSubVertices(std::vector<glm::vec4> triangle, in
     const glm::vec4 topColor = triangle[0];
     const glm::vec4 bottomColor = triangle[1];
     const glm::vec4 middleColor = (topColor+bottomColor)/2;
+
     std::vector<glm::vec4> topTriangle;
-    std::vector<glm::vec4> leftTriangle;
+    std::vector<glm::vec4> leftAndRigthTriangle;
     std::vector<glm::vec4> middleTriangle;
-    std::vector<glm::vec4> rightTriangle;
     std::vector<glm::vec4> subColors;
 
     //Top Triangle
     topTriangle.push_back(topColor);
     topTriangle.push_back(middleColor);
     topTriangle.push_back(middleColor);
-    //Left Triangle
-    leftTriangle.push_back(bottomColor);
-    leftTriangle.push_back(bottomColor);
-    leftTriangle.push_back(middleColor);
+    //LeftAndRight Triangle
+    leftAndRigthTriangle.push_back(middleColor);
+    leftAndRigthTriangle.push_back(bottomColor);
+    leftAndRigthTriangle.push_back(bottomColor);
     //Middle Triangle
-    middleTriangle.push_back(middleColor);
-    middleTriangle.push_back(middleColor);
     middleTriangle.push_back(bottomColor);
-    //Right Triangle
-    rightTriangle.push_back(bottomColor);
-    rightTriangle.push_back(bottomColor);
-    rightTriangle.push_back(middleColor);
+    middleTriangle.push_back(middleColor);
+    middleTriangle.push_back(middleColor);
+
 
     if (iterations > 0){
         iterations--;
         topTriangle = colorSubVertices(topTriangle, iterations);
-        leftTriangle = colorSubVertices(leftTriangle, iterations);
+        leftAndRigthTriangle = colorSubVertices(leftAndRigthTriangle, iterations);
         middleTriangle = colorSubVertices(middleTriangle, iterations);
-        rightTriangle = colorSubVertices(rightTriangle, iterations);
+
     }
     subColors.insert(subColors.end(), topTriangle.begin(), topTriangle.end());
+    subColors.insert(subColors.end(), leftAndRigthTriangle.begin(), leftAndRigthTriangle.end());
     subColors.insert(subColors.end(), middleTriangle.begin(), middleTriangle.end());
-    subColors.insert(subColors.end(), leftTriangle.begin(), leftTriangle.end());
-    subColors.insert(subColors.end(), rightTriangle.begin(), rightTriangle.end());
+    subColors.insert(subColors.end(), leftAndRigthTriangle.begin(), leftAndRigthTriangle.end());
 
     return subColors;
 }

@@ -13,6 +13,7 @@ public:
     void scale(float xyz);
     virtual void translate(float x, float y, float z);
     void setShaderProgramm(GLint ShaderProgramID);
+    virtual std::string className()=0;
 
 
 protected:
