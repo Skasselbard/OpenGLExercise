@@ -5,7 +5,7 @@
 #include <glm/gtx/transform.hpp>
 #include "Sphere.h"
 
-Sphere::Sphere(float radius) : Drawable(){
+Sphere::Sphere(float radius) {
     this->radius=radius;
     modelMatrix = new mat4(1.0f);
 }
@@ -173,7 +173,7 @@ std::vector<vec3> Sphere::splitTriangle(std::vector<vec3> &threePoints, unsigned
     return  resultTriangle;
 }
 
-std::vector<vec4> Sphere::crerateColorVertices() {
+std::vector<vec4> Sphere::createColorVertices() {
     std::vector<vec4> colorVector;
     for(int i = 0; i < 8*pow(4.0f, ((float)detailIterations+1.0f)); i++) {
         colorVector.push_back(glm::vec4(0.0f,1.0f,0.0f,1.0f));
@@ -185,7 +185,7 @@ Sphere::Sphere(float radius, GLint detailIterations): Sphere(radius) {
     this->detailIterations = detailIterations;
 }
 
-std::vector<vec4> Sphere::crerateColorVertices(vec4 color) {
+std::vector<vec4> Sphere::createColorVertices(glm::vec4 color) {
     std::vector<vec4> colorVector;
     for(int i = 0; i < 8*pow(4.0f, ((float)detailIterations+1.0f)); i++) {
         colorVector.push_back(color);

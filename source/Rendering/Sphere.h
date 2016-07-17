@@ -16,8 +16,8 @@ protected:
     float radius;
     int detailIterations = 5;
     virtual std::vector<vec3> createPositionVertices();
-    virtual std::vector<vec4> crerateColorVertices();
-    virtual std::vector<vec4> crerateColorVertices(vec4 color);
+    virtual std::vector<vec4> createColorVertices();
+    virtual std::vector<vec4> createColorVertices(vec4 color);
 
 private:
     std::vector<vec3> splitTriangle(std::vector<vec3> &threePoints, unsigned int iterations);

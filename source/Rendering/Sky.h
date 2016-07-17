@@ -11,12 +11,11 @@
 class Sky: public Sphere {
 public:
     Sky();
-    virtual std::string className(){return std::string("Sphere");}
     void calculateViewMatrix(glm::vec3 looktat, glm::vec3 eye);
     void draw();
 
 private:
-    virtual std::vector<vec4> crerateColorVertices();
+    std::vector<vec4> createColorVertices();
     std::vector<glm::vec4> colorSubVertices(std::vector<glm::vec4> triangle, int iterations);
 };
 

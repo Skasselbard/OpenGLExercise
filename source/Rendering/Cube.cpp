@@ -91,7 +91,7 @@ std::vector<vec3> Cube::createPositionVertices() {
     return vertexArray;
 }
 
-std::vector<vec4> Cube::crerateColorVertices() {
+std::vector<vec4> Cube::createColorVertices() {
     std::vector<vec4> colorArray;
     for (float i=0; i < 6; i++){
         for (int j = 0; j<6; j++) {
@@ -115,7 +115,7 @@ std::vector<vec4> Cube::crerateColorVertices() {
 Cube::Cube() : Drawable(){
 }
 
-std::vector<vec4> Cube::crerateColorVertices(vec4 color) {
+std::vector<vec4> Cube::createColorVertices(vec4 color) {
     std::vector<vec4> colorArray;
     for (float i=0; i < 6; i++){
         for (int j = 0; j<6; j++) {

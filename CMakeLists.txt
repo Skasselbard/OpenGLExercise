@@ -28,8 +28,8 @@ set(SOURCE_FILES
         source/Rendering/ShaderCompiler.h
         source/Rendering/Sky.cpp
         source/Rendering/Sky.h
-        #source/Rendering/Pyramid.cpp
-        #source/Rendering/Pyramid.h
+        source/Rendering/Pyramid.cpp
+        source/Rendering/Pyramid.h
         )
 
 

@@ -11,6 +11,7 @@
 #include "Cube.h"
 #include "ShaderCompiler.h"
 #include "Sky.h"
+#include "Pyramid.h"
 
 
 
@@ -246,8 +247,8 @@ void addDrawable(Drawable* drawable) {
 void draw() {
     for (int i = 0; i < objectList.size(); i++){
         if (dynamic_cast<Sky*>(objectList[i])){
-            ((Sky*)objectList[i])->calculateViewMatrix(lookAtVector,position);
-            ((Sky*)objectList[i])->draw();
+            (dynamic_cast<Sky*>(objectList[i]))->calculateViewMatrix(lookAtVector,position);
+            (dynamic_cast<Sky*>(objectList[i]))->draw();
         }else {
             objectList[i]->draw();
         }
@@ -263,27 +264,37 @@ void setUpObjects() {
     Cube* cube = new Cube();
     Sphere* sphere = new Sphere(1);
     Sphere* octaeder = new Sphere(1,0);
+    Sphere* polyeder = new Sphere(1,1);
+    Pyramid* pyramid = new Pyramid();
 
     sky->setShaderProgramm(skyShader);
     ground->setShaderProgramm(defaultShader);
     sphere->setShaderProgramm(defaultShader);
     octaeder->setShaderProgramm(defaultShader);
     cube->setShaderProgramm(defaultShader);
+    pyramid->setShaderProgramm(defaultShader);
+    polyeder->setShaderProgramm(defaultShader);
 
     cube->setColor(glm::vec4(1.0,1.0,0.0,1.0));
     octaeder->setColor(glm::vec4(0.0,1.0,0.0,1.0));
-    sphere->setColor(glm::vec4(0.0,0.0,1.0,1.0));
+    sphere->setColor(glm::vec4(0.3,0.3,1.0,1.0));
+    pyramid->setColor(glm::vec4(1.0,0.0,1.0,1.0));
+    polyeder->setColor(glm::vec4(0.0,1.0,1.0,1.0));
 
     ground->scale(25,1,25);
     sphere->translate(500,100,-800);
-    octaeder->translate(1000,150,-1000);
+    octaeder->translate(1000,100,-1000);
     cube->translate(2,1,-5);
+    pyramid->translate(15,1,-23);
+    polyeder->translate(1000,100,-200);
 
     addDrawable(sky);
     addDrawable(ground);
     addDrawable(sphere);
     addDrawable(octaeder);
     addDrawable(cube);
+    addDrawable(pyramid);
+    addDrawable(polyeder);
 }
 
 void setProjectionMatrices() {

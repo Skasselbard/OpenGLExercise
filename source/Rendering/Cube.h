@@ -12,8 +12,8 @@ public:
     Cube();
 private:
     std::vector<vec3> createPositionVertices();
-    std::vector<vec4> crerateColorVertices();
-    std::vector<vec4> crerateColorVertices(vec4 color);
+    std::vector<vec4> createColorVertices();
+    std::vector<vec4> createColorVertices(vec4 color);
 };
 
 #endif //AUFGABE_MOVEMENT_H

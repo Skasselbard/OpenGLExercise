@@ -11,12 +11,10 @@
 class Pyramid: public Drawable {
 public:
     Pyramid();
-    void draw();
-    virtual std::string className(){return std::string("Pyramid");}
 private:
-    void createGeometry(void);
-    void addCubeVertices(std::vector<vec3> &vertexArray);
-    void colorise(std::vector<vec4> &colorArray);
+    std::vector<vec3> createPositionVertices();
+    std::vector<vec4> createColorVertices();
+    std::vector<vec4> createColorVertices(vec4 color);
 };
 
 

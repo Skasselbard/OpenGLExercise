@@ -7,11 +7,11 @@
 
 Sky::Sky() : Sphere(80){
     viewMatrix = new mat4(1.0f);
-    crerateColorVertices();
+    //createColorVertices();
     scale(-1.0f,1.0f,1.0f);
 }
 
-std::vector<vec4> Sky::crerateColorVertices() {
+std::vector<vec4> Sky::createColorVertices() {
     std::vector<vec4> colorArray;
     const float grayFactor = 0.8f;
     const glm::vec4 topColor = glm::vec4(grayFactor,grayFactor,1.0f,1.0f);

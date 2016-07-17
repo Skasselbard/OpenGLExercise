@@ -29,7 +29,9 @@ void Drawable::translate(float x, float y, float z) {
 
 void Drawable::setShaderProgramm(GLint shaderProgramID) {
     this->shaderProgramID = shaderProgramID;
-    this->createGeometry();
+    this->setupGeometry();
+    std::vector<vec4> colorVertices = this->createColorVertices();
+    this->setupSurface(colorVertices);
 }
 
 void Drawable::scale(float xyz) {
@@ -53,7 +55,7 @@ Drawable::Drawable() {
     modelMatrix = new mat4(1.0f);
 }
 
-void Drawable::createGeometry() {
+void Drawable::setupGeometry() {
     //create an empty list of vertices
     std::vector<vec3> vertexArray = createPositionVertices();
     positionVertexCount = vertexArray.size();
@@ -75,29 +77,38 @@ void Drawable::createGeometry() {
     glEnableVertexAttribArray(attributeIndex);
     //unbind vbo -- saves all stats given to this objects until this point
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    //create empty list of color attributes
-    std::vector<vec4> color = crerateColorVertices();
+    glBindVertexArray(0);
+    vertexArray.clear();
+}
+
+void Drawable::setColor(glm::vec4 color) {
+    glDeleteVertexArrays(1,&vertexArrayObject);
+    *modelMatrix = mat4(1.0f); //reset modelmatrix because of scaling that takes place in some subclasses
+    setupGeometry();
+    std::vector<vec4> colorVertices = createColorVertices(color);
+    setupSurface(colorVertices);
+}
+
+void Drawable::setupSurface(std::vector<vec4> &colorVertices) {
+    glBindVertexArray(vertexArrayObject);
     //create another vertex buffer object -- a list of color attributes for each vertex. Must have the same number of elements, as the vertex list
     GLuint vboColor;
     glGenBuffers(1, &vboColor);
     glBindBuffer(GL_ARRAY_BUFFER, vboColor);
     //transfer color attributes
-    glBufferData(GL_ARRAY_BUFFER, color.size() * sizeof(vec4), color.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, colorVertices.size() * sizeof(vec4), colorVertices.data(), GL_STATIC_DRAW);
     //get attribute index for variable vsPosition
-    attributeIndex = glGetAttribLocation(shaderProgramID, "vsColor");
+    GLint attributeIndex = glGetAttribLocation(shaderProgramID, "vsColor");
     //tell GPU how to interpret this data for the specified attribute
     glVertexAttribPointer(attributeIndex, 4, GL_FLOAT, GL_FALSE, 0, NULL);
     //activate this attribute
     glEnableVertexAttribArray(attributeIndex);
     //unbind vertex array objects -- saves all stats given to this objects until this point
     glBindVertexArray(0);
-    vertexArray.clear();
-    color.clear();
+    colorVertices.clear();
 }
 
-void Drawable::setColor(glm::vec4 color) {
 
-}
 
 
 
