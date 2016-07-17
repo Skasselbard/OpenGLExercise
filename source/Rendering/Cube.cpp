@@ -123,6 +123,40 @@ std::vector<vec4> Cube::createColorVertices(vec4 color) {
         }
     }
     return colorArray;}
+/*
+std::vector<vec3> Cube::createNormalVertices() {
+    const vec3 left     = vec3(-1.0, 0.0, 0.0);//0
+    const vec3 right    = vec3(1.0, 0.0, 0.0);//1
+    const vec3 top      = vec3(0.0, 1.0, 0.0);//2
+    const vec3 bottom   = vec3(0.0, -1.0, 0.0);//3
+    const vec3 back     = vec3(0.0, 0.0, -1.0);//4
+    const vec3 front    = vec3(0.0, 0.0, 1.0);//5
+
+    std::vector<vec3> normalArray;
+
+    for(int i = 0; i< 6; i++){
+        normalArray.push_back(top);
+    }
+    for(int i = 0; i< 6; i++){
+        normalArray.push_back(bottom);
+    }
+    for(int i = 0; i< 6; i++){
+        normalArray.push_back(front);
+    }
+    for(int i = 0; i< 6; i++){
+        normalArray.push_back(back);
+    }
+    for(int i = 0; i< 6; i++){
+        normalArray.push_back(left);
+    }
+    for(int i = 0; i< 6; i++){
+        normalArray.push_back(right);
+    }
+
+    return normalArray;
+}
+*/
+
 
 
 

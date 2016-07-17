@@ -31,10 +31,26 @@ protected:
     virtual std::vector<vec3> createPositionVertices()=0;
     virtual std::vector<vec4> createColorVertices()=0;
     virtual std::vector<vec4> createColorVertices(glm::vec4 color)=0;
+    virtual std::vector<vec3> createNormalVertices();
 
 private:
+    struct LightInfo{
+        vec3 Position;	//Light Position in eye-coords
+        vec3 Ambient;		//Ambient light intensity
+        vec3 Diffuse;		//Diffuse light intensity
+        vec3 Specular;		//Specular light intensity
+    };
+
+    struct MaterialInfo{
+        vec3 Ambient;			//Ambient reflectivity
+        vec3 Diffuse;			//Diffuse reflectivity
+        vec3 Specular;			//Specular reflectivity
+        float Shininess;	//Specular shininess factor
+    };
+
     void setupGeometry();
     void setupSurface(std::vector<vec4> &colorVertices);
+    void setupNormals();
 };
 
 

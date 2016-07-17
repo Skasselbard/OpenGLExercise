@@ -14,6 +14,7 @@ private:
     std::vector<vec3> createPositionVertices();
     std::vector<vec4> createColorVertices();
     std::vector<vec4> createColorVertices(vec4 color);
+    //std::vector<vec3> createNormalVertices();
 };
 
 #endif //AUFGABE_MOVEMENT_H

@@ -3,9 +3,24 @@
 //
 
 #include <glm/gtx/transform.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
 #include "Drawable.h"
 
 void Drawable::draw() {
+    /*LightInfo lightInfo;
+    lightInfo.Ambient = vec3(0.5,0.5,0.5);
+    lightInfo.Diffuse = vec3(0.9,0.5,0.3);
+    lightInfo.Specular = vec3(0.5,0.5,0.5);
+    lightInfo.Position = vec3(-10,40,10);
+    LightInfo light[1];
+    light[0] = lightInfo;
+    MaterialInfo material;
+    material.Specular = vec3(0.5,0.5,0.5);
+    material.Diffuse = vec3(0.5,0.5,0.5);
+    material.Ambient = vec3(0.5,0.5,0.5);
+    material.Shininess = 1.0f;*/
+
+    mat3 normalMatrix = glm::inverseTranspose(mat3((*viewMatrix) * (*modelMatrix)));
     glUseProgram(shaderProgramID);
     GLint uniformLocation(0);
     uniformLocation = glGetUniformLocation(shaderProgramID, "modelMatrix");
@@ -14,6 +29,14 @@ void Drawable::draw() {
     glUniformMatrix4fv(uniformLocation, 1, false, &(*viewMatrix)[0][0]);
     uniformLocation = glGetUniformLocation(shaderProgramID, "projectionMatrix");
     glUniformMatrix4fv(uniformLocation, 1, false, &(*projectionMatrix)[0][0]);
+    uniformLocation = glGetUniformLocation(shaderProgramID, "normalMatrix");
+    glUniformMatrix3fv(uniformLocation, 1, false, &normalMatrix[0][0]);
+    /*
+    uniformLocation = glGetUniformLocation(shaderProgramID, "Light");
+    glUniform(uniformLocation, 1, false, &light);
+    uniformLocation = glGetUniformLocation(shaderProgramID, "Material");
+    glUniformMatrix4fv(uniformLocation, 1, false, &material);
+    */
     glBindVertexArray(vertexArrayObject);
     glDrawArrays(GL_TRIANGLES, 0, positionVertexCount);
     glBindVertexArray(0);
@@ -32,6 +55,7 @@ void Drawable::setShaderProgramm(GLint shaderProgramID) {
     this->setupGeometry();
     std::vector<vec4> colorVertices = this->createColorVertices();
     this->setupSurface(colorVertices);
+    this->setupNormals();
 }
 
 void Drawable::scale(float xyz) {
@@ -87,6 +111,7 @@ void Drawable::setColor(glm::vec4 color) {
     setupGeometry();
     std::vector<vec4> colorVertices = createColorVertices(color);
     setupSurface(colorVertices);
+    setupNormals();
 }
 
 void Drawable::setupSurface(std::vector<vec4> &colorVertices) {
@@ -107,6 +132,46 @@ void Drawable::setupSurface(std::vector<vec4> &colorVertices) {
     glBindVertexArray(0);
     colorVertices.clear();
 }
+
+std::vector<vec3> Drawable::createNormalVertices() {
+    std::vector<vec3> normalArray = createPositionVertices();
+    if (normalArray.size()%3 != 0){
+        assert(false);
+    }
+    for (size_t i = 2; i<normalArray.size(); i+=3){
+        vec3 ab = normalArray[i-1] - normalArray[i-2];
+        vec3 bc = normalArray[i] - normalArray[i-2];
+        vec3 normal = glm::cross(ab,bc);
+        for(int j=0; j<3; j++){
+            normalArray[i+j-2]=glm::normalize(normal);
+        }
+    }
+    return normalArray;
+}
+
+void Drawable::setupNormals() {
+    std::vector<vec3> normals = createNormalVertices();
+    glBindVertexArray(vertexArrayObject);
+    //create another vertex buffer object -- a list of color attributes for each vertex. Must have the same number of elements, as the vertex list
+    GLuint vboNormals;
+    glGenBuffers(1, &vboNormals);
+    glBindBuffer(GL_ARRAY_BUFFER, vboNormals);
+    //transfer color attributes
+    glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(vec3), normals.data(), GL_STATIC_DRAW);
+    //get attribute index for variable vsPosition
+    GLint attributeIndex = glGetAttribLocation(shaderProgramID, "vsNormal");
+    //tell GPU how to interpret this data for the specified attribute
+    glVertexAttribPointer(attributeIndex, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    //activate this attribute
+    glEnableVertexAttribArray(attributeIndex);
+    //unbind vertex array objects -- saves all stats given to this objects until this point
+    glBindVertexArray(0);
+    normals.clear();
+}
+
+
+
+
 
 
 
