@@ -193,6 +193,17 @@ std::vector<vec4> Sphere::createColorVertices(glm::vec4 color) {
     return colorVector;
 }
 
+std::vector<vec3> Sphere::createNormalVertices() {
+    std::vector<vec3> normalArray = createPositionVertices();
+    if (normalArray.size()%3 != 0){
+        assert(false);
+    }
+    for (int i = 0; i<normalArray.size(); i++){
+        normalArray[i]=vec3(0.0f,0.0f,0.0f);
+    }
+    return normalArray;
+}
+
 
 
 

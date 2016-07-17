@@ -111,7 +111,6 @@ void Drawable::setColor(glm::vec4 color) {
     std::vector<vec4> colorVertices = createColorVertices(color);
     setupSurface(colorVertices);
     setupNormals();
-
 }
 
 void Drawable::setupSurface(std::vector<vec4> &colorVertices) {

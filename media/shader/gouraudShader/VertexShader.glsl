@@ -65,7 +65,7 @@ void main()
     Light[0] = lightInfo;
     Material.Specular = vec3(0.5,0.5,0.5);
     Material.Diffuse = vec3(0.5,0.5,0.5);
-    Material.Ambient = vec3(0.5,0.5,0.5);
+    Material.Ambient = vec3(0.3,0.3,0.3);
     Material.Shininess = 1.0f;
 
 	vec3 eyeNorm;
