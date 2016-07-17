@@ -57,8 +57,7 @@ void parseCommandLine(int argc, char **argv) {
 
 
 //evaluates letter-keys
-void KeyPressed(unsigned char key, int x, int y)
-{
+void KeyPressed(unsigned char key, int x, int y){
   switch (key) {
   case 'a': 
   case 'b':
@@ -69,13 +68,11 @@ void KeyPressed(unsigned char key, int x, int y)
 
 
 //evaluates letter-keys
-void KeyReleased(unsigned char key, int x, int y)
-{
+void KeyReleased(unsigned char key, int x, int y){
 }
 
 //evaluates special keys
-void KeyPressed(int key, int x, int y)
-{
+void KeyPressed(int key, int x, int y){
     switch (key) {
         case GLUT_KEY_PAGE_UP:{
           position = position + glm::vec3(0.0,1.0*moveModifier,0.0);
@@ -125,11 +122,9 @@ void MouseMove(int x, int y)
 /************************************************************************/
 /* scene updating and rendering                                         */
 /************************************************************************/
-void RenderScene() 
-{
+void RenderScene(){
     //clear DepthBuffer
     glClear(GL_DEPTH_BUFFER_BIT);
-
     //toggle between wire frame and opaque view - for debugging purposes
     glPolygonMode(GL_FRONT_AND_BACK, sWireframe ? GL_LINE : GL_FILL);
     viewMatrix = glm::lookAt(
@@ -139,8 +134,6 @@ void RenderScene()
     );
     setViewMatrices();
     draw();
-
-
 }
 
 
@@ -149,41 +142,32 @@ void RenderScene()
 /* glut callbacks														                            */
 /************************************************************************/
 
-void Display() 
-{
+void Display(){
   //define color that is used to clear the screen
   glClearColor(0.7f, 0.7f, 0.7f, 1.0);
-
   //clear the current color and depth buffer
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
   //render scene
   RenderScene();
-
   //show rendered content
   glutSwapBuffers();
-
   //force a redisplay for continues animation
   glutPostRedisplay();
 }
 
 
-void Reshape(int width, int height)
-{
+void Reshape(int width, int height){
     //resets view port
     glViewport(0, 0, width, height);
-
     //create ProjectionMatrix
     float aspectRatio = static_cast<float>(width)/static_cast<float>(height);
     projectionMatrix = glm::perspective(35.0f, aspectRatio, 1.0f, 100.0f);//blindly copied values from https://stackoverflow.com/questions/8115352/glmperspective-explanation
     GLint uniformLocation(0);
-
     glUseProgram(shaderProgramID);
     uniformLocation = glGetUniformLocation(shaderProgramID, "projectionMatrix");
     glUniformMatrix4fv(uniformLocation, 1, false, &projectionMatrix[0][0]);
     glUseProgram(0);
     setProjectionMatrices();
-
 }
 
 
@@ -193,8 +177,7 @@ void Reshape(int width, int height)
 /* application main                                                     */
 /************************************************************************/
 
-int main(int argc, char* argv[]) 
-{
+int main(int argc, char* argv[]){
     parseCommandLine(argc, argv);
 
     //init glut
@@ -308,7 +291,6 @@ void setViewMatrices() {
         if (!dynamic_cast<Sky*>(objectList[i])){
             objectList[i]->setViewMatrix(&viewMatrix);
         }
-
     }
 }
 
