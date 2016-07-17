@@ -265,11 +265,11 @@ void setUpObjects() {
     polyeder->setColor(glm::vec4(0.0,1.0,1.0,1.0));
 
     ground->scale(25,1,25);
-    sphere->translate(500,100,-800);
-    octaeder->translate(1000,100,-1000);
+    sphere->translate(10,2,-10);
+    octaeder->translate(18,2,-5);
     cube->translate(2,1,-5);
     pyramid->translate(15,1,-23);
-    polyeder->translate(1000,100,-200);
+    polyeder->translate(9,2,-15);
 
     addDrawable(sky);
     addDrawable(ground);

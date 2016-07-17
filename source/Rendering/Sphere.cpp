@@ -12,6 +12,7 @@ Sphere::Sphere(float radius) {
 
 std::vector<vec3> Sphere::createPositionVertices() {
     std::vector<vec3> vertexArray;
+
     //vertex positions
     const glm::vec3 top         = glm::vec3(0.0f,radius,0.0f);
     const glm::vec3 bottom      = glm::vec3(0.0f,-radius,0.0f);
@@ -83,13 +84,11 @@ std::vector<vec3> Sphere::createPositionVertices() {
     vertexArray.insert(vertexArray.end(),vertexArrayBottomRight.begin(), vertexArrayBottomRight.end());
     vertexArray.insert(vertexArray.end(),vertexArrayBottomBack.begin(), vertexArrayBottomBack.end());
 
-    float scalefactor =64; // the higher, the rounder
+    const float scalefactor =128; // the higher, the rounder
     //Normalize vertices
     for (int i = 0; i < vertexArray.size(); i++){
-        vertexArray[i] = normalize(vertexArray[i],glm::vec3(0.0f,0.0f,0.0f),-scalefactor*radius);
+        vertexArray[i] = normalize(vertexArray[i],glm::vec3(0.0f,0.0f,0.0f),-radius*scalefactor)/(scalefactor);
     }
-    //scale to fit radius
-    scale(1.0f/scalefactor);
     return vertexArray;
 }
 /**
@@ -190,6 +189,7 @@ std::vector<vec4> Sphere::createColorVertices(glm::vec4 color) {
     for(int i = 0; i < 8*pow(4.0f, ((float)detailIterations+1.0f)); i++) {
         colorVector.push_back(color);
     }
+
     return colorVector;
 }
 

@@ -107,11 +107,11 @@ void Drawable::setupGeometry() {
 
 void Drawable::setColor(glm::vec4 color) {
     glDeleteVertexArrays(1,&vertexArrayObject);
-    *modelMatrix = mat4(1.0f); //reset modelmatrix because of scaling that takes place in some subclasses
     setupGeometry();
     std::vector<vec4> colorVertices = createColorVertices(color);
     setupSurface(colorVertices);
     setupNormals();
+
 }
 
 void Drawable::setupSurface(std::vector<vec4> &colorVertices) {
