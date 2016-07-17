@@ -17,6 +17,8 @@ public:
 private:
     std::vector<vec4> createColorVertices();
     std::vector<glm::vec4> colorSubVertices(std::vector<glm::vec4> triangle, int iterations);
+
+    std::vector<vec3> createNormalVertices();
 };
 
 

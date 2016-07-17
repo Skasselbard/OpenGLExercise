@@ -22,8 +22,6 @@ protected:
 private:
     std::vector<vec3> splitTriangle(std::vector<vec3> &threePoints, unsigned int iterations);
     vec3 normalize(vec3 fixpoint, vec3 point, float radius);
-
-    std::vector<vec3> createNormalVertices();
 };
 
 #endif //AUFGABE_SPHERE_H

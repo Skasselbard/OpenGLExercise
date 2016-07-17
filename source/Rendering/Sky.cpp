@@ -100,6 +100,16 @@ void Sky::draw() {
     glDepthMask(GL_TRUE);
 }
 
+std::vector<vec3> Sky::createNormalVertices() {
+    std::vector<vec3> normalArray = createPositionVertices();
+    if (normalArray.size()%3 != 0){
+        assert(false);
+    }
+    for (int i = 0; i<normalArray.size(); i++){
+        normalArray[i]=vec3(0.0f,0.0f,0.0f);
+    }
+    return normalArray;
+}
 
 
 
